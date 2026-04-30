@@ -62,7 +62,7 @@ WIDGET = {
     'sleep_efficiency_pct':       {'label': 'Sleep Efficiency (%)',               'type': 'float',  'min': 50.0, 'max': 100.0, 'default': 85.0, 'step': 0.1},
     'avg_oxygen_saturation':      {'label': 'Avg Oxygen Saturation (%)',          'type': 'float',  'min': 85.0, 'max': 100.0, 'default': 94.5, 'step': 0.1},
     'wake_after_sleep_onset_min': {'label': 'Wake After Sleep Onset (min)',       'type': 'float',  'min': 0.0,  'max': 180.0, 'default': 50.0, 'step': 1.0},
-    'age_at_baseline':            {'label': 'Age (years)',                        'type': 'int',    'min': 35,   'max': 90,    'default': 64},
+    'age_at_baseline':            {'label': 'Age (years)',                        'type': 'int',    'min': 18,   'max': 120,   'default': 64},
     'sex':                        {'label': 'Sex',                                'type': 'select', 'options': {'Male': 1, 'Female': 2},                      'default': 'Male'},
     'taking_bp_medication':       {'label': 'Taking Blood Pressure Medication',   'type': 'select', 'options': {'No': 0.0, 'Yes': 1.0},                       'default': 'No'},
     'smoking_status':             {'label': 'Smoking Status',                     'type': 'select', 'options': {'Never': 0.0, 'Former': 1.0, 'Current': 2.0}, 'default': 'Never'},
