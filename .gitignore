@@ -1,0 +1,13 @@
+# Large raw data files
+Dataset/shhs1-dataset-0.13.0.csv
+Dataset/shhs-cvd-summary-dataset-0.13.0.csv
+Dataset/dataset_ready_for_modeling.csv
+
+# Python cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Conda / virtualenv
+.env
+*.egg-info/
