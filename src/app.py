@@ -24,10 +24,9 @@ import matplotlib.pyplot as plt
 import streamlit as st
 
 # ── Paths (run from project root) ─────────────────────────────────────────────
-ROOT         = os.path.join(os.path.dirname(__file__), '..')
-MODEL_PATH   = os.path.join(ROOT, 'Output', 'model.pkl')
-SHAP_PATH    = os.path.join(ROOT, 'Output', 'shap_top_features.json')
-DATASET_PATH = os.path.join(ROOT, 'Dataset', 'dataset_ready_for_modeling.csv')
+ROOT       = os.path.join(os.path.dirname(__file__), '..')
+MODEL_PATH = os.path.join(ROOT, 'Output', 'model.pkl')
+SHAP_PATH  = os.path.join(ROOT, 'Output', 'shap_top_features.json')
 
 THRESHOLD = 0.55
 
@@ -78,18 +77,20 @@ def load_resources():
     with open(SHAP_PATH) as f:
         shap_data = json.load(f)
 
-    # Background sample for SHAP LinearExplainer
-    df = pd.read_csv(DATASET_PATH)
-    X_bg = df.drop(columns=['any_cvd']).sample(200, random_state=42)
     preprocessor = model.named_steps['preprocessor']
-    X_bg_t       = preprocessor.transform(X_bg)
-    explainer    = shap.LinearExplainer(model.named_steps['model'], X_bg_t)
+    lr_model     = model.named_steps['model']
 
-    # Expanded feature names (numeric + OHE)
-    numeric_cols = [c for c in X_bg.columns if c not in CATEGORICAL_COLS]
-    ohe_names    = (preprocessor.named_transformers_['cat']['encoder']
-                    .get_feature_names_out(CATEGORICAL_COLS).tolist())
+    # Feature names from the fitted preprocessor — no dataset CSV needed
+    numeric_cols   = [c for c in ALL_FEATURES if c not in CATEGORICAL_COLS]
+    ohe_names      = (preprocessor.named_transformers_['cat']['encoder']
+                      .get_feature_names_out(CATEGORICAL_COLS).tolist())
     all_feat_names = numeric_cols + ohe_names
+
+    # Zero background: StandardScaler normalizes numerics to mean=0, so zeros equal
+    # the population mean — the correct SHAP baseline. OHE features are an approximation
+    # but directionally accurate for visualization.
+    background = np.zeros((1, len(all_feat_names)))
+    explainer  = shap.LinearExplainer(lr_model, background)
 
     return model, shap_data, explainer, preprocessor, all_feat_names
 
